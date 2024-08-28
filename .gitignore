@@ -1,0 +1,7 @@
+# received files
+*.log
+received_fies/*
+
+__pycache__/*
+*/__pycache__/*
+*.pyc
