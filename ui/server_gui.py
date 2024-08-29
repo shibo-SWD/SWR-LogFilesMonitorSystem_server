@@ -73,4 +73,28 @@ class ServerGUI(QMainWindow):
         font_dialog.exec_()
         self.font_manager.set_font_size(font_dialog.slider.value())  # 使用 FontManager 设置字体
 
+    def show_path_dialog(self):
+        """显示路径输入对话框"""
+        dialog = QDialog(self)
+        dialog.setWindowTitle('输入路径')
+        dialog.setFixedSize(300, 120)
 
+        layout = QFormLayout(dialog)
+
+        path_input = QLineEdit(dialog)
+        layout.addRow(QLabel('路径:'), path_input)
+
+        confirm_button = QPushButton('确认', dialog)
+        confirm_button.clicked.connect(lambda: run_streamlit(path_input.text(), dialog))
+        layout.addWidget(confirm_button)
+
+        dialog.exec_()
+
+    def run_streamlit(path, dialog):
+        """在指定路径下运行 streamlit"""
+        try:
+            subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
+        except Exception as e:
+            print(f"Error running Streamlit: {e}")
+        finally:
+            dialog.accept()

@@ -1,8 +1,11 @@
 from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QStatusBar, QAction, QMenuBar, QToolBar, QSplitter, QApplication, QSpacerItem, QSizePolicy
+    QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QStatusBar, QAction, QMenuBar, QToolBar, QSplitter, QApplication, QDialog, QFormLayout, QSpacerItem, QSizePolicy
 )
+
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt, QSize
+import subprocess
+import sys
 
 from utils.connection_utils import get_local_ip_address
 
@@ -36,7 +39,7 @@ def setup_ui(main_window):
     icon_bar.addSeparator()
 
     icon_button2 = QAction(QIcon('./data/images/DataAnalysis.png'), 'Button 2', main_window)
-    icon_button2.triggered.connect(lambda: switch_content(main_window, 'content2'))
+    icon_button2.triggered.connect(lambda: show_path_dialog(main_window))
     icon_bar.addAction(icon_button2)
 
     # 添加图标栏到主分隔器
@@ -103,8 +106,8 @@ def setup_ui(main_window):
     right_splitter.addWidget(log_widget)
 
     # 设置分隔器的比例（80%操作空间，20%日志空间）
-    right_splitter.setStretchFactor(0, 6)
-    right_splitter.setStretchFactor(1, 4)
+    right_splitter.setStretchFactor(0, 8)
+    right_splitter.setStretchFactor(1, 2)
 
     # 将右侧分隔器添加到主分隔器
     main_splitter.addWidget(right_splitter)
@@ -137,6 +140,32 @@ def switch_content(main_window, content_name):
         # label = QLabel('Content 2 is displayed')
         # main_window.operation_layout.addWidget(label)
         pass
+
+def show_path_dialog(main_window):
+    """显示路径输入对话框"""
+    dialog = QDialog(main_window)
+    dialog.setWindowTitle('输入路径')
+    dialog.setFixedSize(300, 120)
+
+    layout = QFormLayout(dialog)
+
+    path_input = QLineEdit(dialog)
+    layout.addRow(QLabel('路径:'), path_input)
+
+    confirm_button = QPushButton('确认', dialog)
+    confirm_button.clicked.connect(lambda: run_streamlit(path_input.text(), dialog))
+    layout.addWidget(confirm_button)
+
+    dialog.exec_()
+
+def run_streamlit(path, dialog):
+    """在指定路径下运行 streamlit"""
+    try:
+        subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
+    except Exception as e:
+        print(f"Error running Streamlit: {e}")
+    finally:
+        dialog.accept()
 
 def setup_menu_bar(main_window):
     """初始化菜单栏及其选项"""
