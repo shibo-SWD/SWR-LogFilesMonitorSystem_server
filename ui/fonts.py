@@ -15,9 +15,9 @@ class FontSizeDialog(QDialog):
 
         # 添加滑块
         self.slider = QSlider(Qt.Horizontal)
-        self.slider.setMinimum(8)
-        self.slider.setMaximum(24)
-        self.slider.setValue(12)  # 默认字体大小
+        self.slider.setMinimum(16)
+        self.slider.setMaximum(32)
+        self.slider.setValue(18)  # 默认字体大小
         self.slider.setTickPosition(QSlider.TicksBelow)
         self.slider.setTickInterval(2)
         self.slider.valueChanged.connect(self.update_font_size)

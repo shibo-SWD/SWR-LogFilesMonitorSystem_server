@@ -1,8 +1,7 @@
 # server_gui.py
 
 from PyQt5.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, QLabel, 
-    QTextEdit, QStatusBar, QAction, QMenuBar, QLineEdit
+    QMainWindow
 )
 from PyQt5.QtGui import QIcon, QFont   # 导入 QIcon 模块
 
@@ -11,7 +10,6 @@ from ui.fonts import FontSizeDialog, FontManager
 from ui.communicator import Communicator
 from ui.theme_manager import ThemeManager
 from ui.layout_manager import setup_ui
-
 
 
 class ServerGUI(QMainWindow):
@@ -31,87 +29,6 @@ class ServerGUI(QMainWindow):
         self.communicator.log_update.connect(self.update_log_text)
         self.communicator.server_started.connect(self.on_server_started)
         self.communicator.server_stopped.connect(self.on_server_stopped)
-
-    # def initUI(self):
-    #     """初始化UI组件"""
-    #     self.setWindowTitle('赛威德打磨软件文件监控服务端')
-    #     self.setWindowIcon(QIcon('data/doc/SoftwareLogo.png'))  # 设置窗口图标
-    #     self.resize(600, 400)  # 设置窗口大小
-
-    #     # 设置初始字体大小
-    #     font = QFont()
-    #     font.setPointSize(12)  # 将字体大小设置为 12，可以根据需要调整大小
-    #     self.setFont(font)
-
-    #     # 中央Widget
-    #     central_widget = QWidget()
-    #     self.setCentralWidget(central_widget)
-    #     layout = QVBoxLayout()
-
-    #     # 状态显示
-    #     self.status_label = QLabel('服务器未启动')
-    #     layout.addWidget(self.status_label)
-
-    #     # 将 QLabel 改为 QLineEdit 显示 IP 地址并设置为只读
-    #     self.ip_line_edit = QLineEdit(self)
-    #     self.ip_line_edit.setText(get_local_ip_address())
-    #     self.ip_line_edit.setReadOnly(True)  # 设置为只读
-    #     layout.addWidget(QLabel('本地 IP 地址:'))
-    #     layout.addWidget(self.ip_line_edit)
-
-    #     # 日志保存地址输入框
-    #     self.save_dir_input = QLineEdit(self)
-    #     self.save_dir_input.setText('./data/received_files')
-    #     layout.addWidget(QLabel('监控日志保存地址:'))
-    #     layout.addWidget(self.save_dir_input)
-
-    #     # 启动和关闭按钮
-    #     self.start_button = QPushButton('启动服务器')
-    #     self.start_button.clicked.connect(self.start_server)
-    #     layout.addWidget(self.start_button)
-
-    #     self.stop_button = QPushButton('关闭服务器')
-    #     self.stop_button.setEnabled(False)
-    #     self.stop_button.clicked.connect(self.stop_server)
-    #     layout.addWidget(self.stop_button)
-
-    #     # 日志显示区域
-    #     self.log_text = QTextEdit()
-    #     self.log_text.setReadOnly(True)
-    #     layout.addWidget(self.log_text)
-
-    #     central_widget.setLayout(layout)
-
-    #     # 状态栏
-    #     self.status_bar = QStatusBar()
-    #     self.setStatusBar(self.status_bar)
-
-    #     # 菜单栏
-    #     menubar = self.menuBar()
-    #     file_menu = menubar.addMenu('文件')
-    #     about_action = QAction('关于', self)
-    #     about_action.triggered.connect(self.show_about)
-    #     file_menu.addAction(about_action)
-
-    #     exit_action = QAction('退出', self)
-    #     exit_action.triggered.connect(self.close)
-    #     file_menu.addAction(exit_action)
-
-    #     # 添加字体调整选项
-    #     settings_menu = menubar.addMenu('设置')
-    #     font_action = QAction('调整字体大小', self)
-    #     font_action.triggered.connect(self.open_font_size_dialog)
-    #     settings_menu.addAction(font_action)
-
-    #     # 主题选择菜单
-    #     theme_menu = menubar.addMenu('主题')
-    #     light_theme_action = QAction('明亮主题', self)
-    #     light_theme_action.triggered.connect(self.theme_manager.set_light_theme)
-    #     theme_menu.addAction(light_theme_action)
-
-    #     dark_theme_action = QAction('暗黑主题', self)
-    #     dark_theme_action.triggered.connect(self.theme_manager.set_dark_theme)
-    #     theme_menu.addAction(dark_theme_action)
 
     def start_server(self):
         """启动服务器"""
