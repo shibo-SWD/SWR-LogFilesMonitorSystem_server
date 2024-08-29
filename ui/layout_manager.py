@@ -1,13 +1,59 @@
 from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, QStatusBar, QAction, QMenuBar, QToolBar, QSplitter, QApplication, QDialog, QFormLayout, QSpacerItem, QSizePolicy
+    QWidget, QVBoxLayout, QLabel, QLineEdit, QPushButton, QTextEdit, 
+    QStatusBar, QAction, QMenuBar, QToolBar, QSplitter, QApplication, QDialog, 
+    QFormLayout, QSpacerItem, QSizePolicy, QFileDialog
 )
 
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt, QSize
 import subprocess
-import sys
+import os
 
 from utils.connection_utils import get_local_ip_address
+
+class PathSelectorDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle('选择路径')
+        
+        # 布局
+        layout = QVBoxLayout()
+        self.setLayout(layout)
+
+        # 路径输入框
+        self.path_line_edit = QLineEdit(self)
+        layout.addWidget(QLabel('请输入路径:'))
+        layout.addWidget(self.path_line_edit)
+
+        # 选择路径按钮
+        self.browse_button = QPushButton('选择路径', self)
+        self.browse_button.clicked.connect(self.browse_path)
+        layout.addWidget(self.browse_button)
+
+        # 确认按钮
+        self.confirm_button = QPushButton('确认', self)
+        self.confirm_button.clicked.connect(self.confirm_path)
+        layout.addWidget(self.confirm_button)
+
+    def browse_path(self):
+        """ 打开文件夹选择对话框 """
+        folder_path = QFileDialog.getExistingDirectory(self, '选择文件夹')
+        if folder_path:
+            self.path_line_edit.setText(folder_path)
+
+    def confirm_path(self):
+        """ 确认按钮点击事件 """
+        path = self.path_line_edit.text()
+        if os.path.isdir(path):
+            # 在输入的路径下运行 "streamlit run main.py"
+            subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
+        else:
+            print("指定的路径无效")
+
+# 调用示例
+def on_icon_button2_clicked():
+    dialog = PathSelectorDialog()
+    dialog.exec_()
 
 def setup_ui(main_window):
     """初始化主窗口的UI组件和布局"""
@@ -39,7 +85,7 @@ def setup_ui(main_window):
     icon_bar.addSeparator()
 
     icon_button2 = QAction(QIcon('./data/images/DataAnalysis.png'), 'Button 2', main_window)
-    icon_button2.triggered.connect(lambda: show_path_dialog(main_window))
+    icon_button2.triggered.connect(on_icon_button2_clicked)
     icon_bar.addAction(icon_button2)
 
     # 添加图标栏到主分隔器
