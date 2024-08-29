@@ -1,3 +1,10 @@
+<div align=center>
+<img    width="350"
+        src=data/doc/SaiwiderLogo.png/>
+</div>
+
+---
+
 # 文件监控服务端项目
 
 ## 简介

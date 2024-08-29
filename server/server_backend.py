@@ -3,9 +3,10 @@ import socket
 import threading
 import os
 import time
+import config.setting as cs
 
 class FileServer:
-    def __init__(self, host='0.0.0.0', port=12345, save_dir='./data/received_files', log_signal=None):
+    def __init__(self, host=cs.DEFAULT_HOST, port=cs.DEFAULT_PORT, save_dir=cs.DEFAULT_SAVE_DIR, log_signal=None):
         self.host = host
         self.port = port
         self.save_dir = save_dir
