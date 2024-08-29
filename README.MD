@@ -6,6 +6,7 @@
 ---
 
 # 文件监控服务端项目
+![Alt](https://repobeats.axiom.co/api/embed/d97cfc90ffd6e8982b3f6e180508e2a924595f8a.svg "Repobeats analytics image")
 
 ## 简介
 
