@@ -1,0 +1,3 @@
+[submodule "dataVis/streamlitVis"]
+	path = dataVis/streamlitVis
+	url = https://github.com/shibo-SWD/GrindLogStreamlit.git

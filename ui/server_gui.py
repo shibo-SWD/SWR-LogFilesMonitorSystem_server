@@ -1,15 +1,16 @@
 # server_gui.py
 
 from PyQt5.QtWidgets import (
-    QMainWindow
+    QMainWindow, QLabel, QLineEdit, QPushButton,  QDialog, QFormLayout
 )
-from PyQt5.QtGui import QIcon, QFont   # 导入 QIcon 模块
 
 from server.server_control import ServerController
 from ui.fonts import FontSizeDialog, FontManager
 from ui.communicator import Communicator
 from ui.theme_manager import ThemeManager
 from ui.layout_manager import setup_ui
+
+import subprocess
 
 
 class ServerGUI(QMainWindow):
@@ -90,11 +91,11 @@ class ServerGUI(QMainWindow):
 
         dialog.exec_()
 
-    def run_streamlit(path, dialog):
-        """在指定路径下运行 streamlit"""
-        try:
-            subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
-        except Exception as e:
-            print(f"Error running Streamlit: {e}")
-        finally:
-            dialog.accept()
+    # def run_streamlit(path, dialog):
+    #     """在指定路径下运行 streamlit"""
+    #     try:
+    #         subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
+    #     except Exception as e:
+    #         print(f"Error running Streamlit: {e}")
+    #     finally:
+    #         dialog.accept()

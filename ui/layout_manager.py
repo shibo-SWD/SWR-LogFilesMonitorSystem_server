@@ -22,6 +22,8 @@ class PathSelectorDialog(QDialog):
 
         # 路径输入框
         self.path_line_edit = QLineEdit(self)
+        default_path = './DataVis'  # 设置默认路径
+        self.path_line_edit.setText(default_path)  # 为路径输入框设置默认值
         layout.addWidget(QLabel('请输入路径:'))
         layout.addWidget(self.path_line_edit)
 
@@ -36,24 +38,35 @@ class PathSelectorDialog(QDialog):
         layout.addWidget(self.confirm_button)
 
     def browse_path(self):
-        """ 打开文件夹选择对话框 """
-        folder_path = QFileDialog.getExistingDirectory(self, '选择文件夹')
+        """ 打开文件夹选择对话框，从默认路径开始 """
+        current_path = self.path_line_edit.text()  # 获取当前路径输入框中的值
+        folder_path = QFileDialog.getExistingDirectory(self, '选择文件夹', current_path)  # 使用当前路径作为起始目录
         if folder_path:
-            self.path_line_edit.setText(folder_path)
+            self.path_line_edit.setText(folder_path)  # 更新路径输入框中的值
 
     def confirm_path(self):
         """ 确认按钮点击事件 """
         path = self.path_line_edit.text()
         if os.path.isdir(path):
-            # 在输入的路径下运行 "streamlit run main.py"
-            subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
+            self.accept()  # 关闭对话框
+            run_streamlit(path)  # 运行 Streamlit
         else:
             print("指定的路径无效")
 
-# 调用示例
+def run_streamlit(path):
+    """在指定路径下运行 streamlit"""
+    try:
+        subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
+    except Exception as e:
+        print(f"Error running Streamlit: {e}")
+
+def show_path_dialog(main_window):
+    """显示路径输入对话框"""
+    dialog = PathSelectorDialog(main_window)
+    dialog.exec_()  # 打开对话框
+
 def on_icon_button2_clicked():
-    dialog = PathSelectorDialog()
-    dialog.exec_()
+    show_path_dialog(None)  # 传入主窗口实例，或传入 None
 
 def setup_ui(main_window):
     """初始化主窗口的UI组件和布局"""
@@ -186,32 +199,6 @@ def switch_content(main_window, content_name):
         # label = QLabel('Content 2 is displayed')
         # main_window.operation_layout.addWidget(label)
         pass
-
-def show_path_dialog(main_window):
-    """显示路径输入对话框"""
-    dialog = QDialog(main_window)
-    dialog.setWindowTitle('输入路径')
-    dialog.setFixedSize(300, 120)
-
-    layout = QFormLayout(dialog)
-
-    path_input = QLineEdit(dialog)
-    layout.addRow(QLabel('路径:'), path_input)
-
-    confirm_button = QPushButton('确认', dialog)
-    confirm_button.clicked.connect(lambda: run_streamlit(path_input.text(), dialog))
-    layout.addWidget(confirm_button)
-
-    dialog.exec_()
-
-def run_streamlit(path, dialog):
-    """在指定路径下运行 streamlit"""
-    try:
-        subprocess.Popen(['streamlit', 'run', 'main.py'], cwd=path)
-    except Exception as e:
-        print(f"Error running Streamlit: {e}")
-    finally:
-        dialog.accept()
 
 def setup_menu_bar(main_window):
     """初始化菜单栏及其选项"""
