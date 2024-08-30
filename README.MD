@@ -6,11 +6,11 @@
 ---
 
 # 文件监控服务端项目
-![Alt](https://repobeats.axiom.co/api/embed/d97cfc90ffd6e8982b3f6e180508e2a924595f8a.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/b33b989adf578b3a04f6460b368ee1941d367fbf.svg "Repobeats analytics image")
 
 ## 简介
 
-文件监控服务端是一个基于 Python 和 PyQt5 的桌面应用程序。该程序允许用户通过图形界面启动和关闭文件服务器，并实时监控客户端发送的文件。
+文件监控服务端是一个基于 Python 和 PyQt5 的桌面应用程序。该程序允许用户通过图形界面启动和关闭文件服务器，并实时监控赛威德视觉打磨软件记录的日志。基于streanlit对日志文件进行可视化。
 
 ![界面](./data/doc/界面.png)
 ![界面-黑暗模式](./data/doc/黑暗模式.png)

@@ -152,8 +152,8 @@ def setup_ui(main_window):
     right_splitter.addWidget(log_widget)
 
     # 设置分隔器的比例（80%操作空间，20%日志空间）
-    right_splitter.setStretchFactor(0, 8)
-    right_splitter.setStretchFactor(1, 2)
+    right_splitter.setStretchFactor(0, 6)
+    right_splitter.setStretchFactor(1, 4)
 
     # 将右侧分隔器添加到主分隔器
     main_splitter.addWidget(right_splitter)
