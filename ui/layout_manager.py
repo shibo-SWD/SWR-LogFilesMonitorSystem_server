@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import (
 
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import Qt, QSize
+from utils.debug_tool import debug_print
+from . import button_ui 
 import subprocess
 import os
 
@@ -65,10 +67,19 @@ def show_path_dialog(main_window):
     dialog = PathSelectorDialog(main_window)
     dialog.exec_()  # 打开对话框
 
-def on_icon_button2_clicked():
-    show_path_dialog(None)  # 传入主窗口实例，或传入 None
+def on_icon_button1_clicked(main_window):
+    debug_print("Connection button pushed")
+    switch_content(main_window, 'connect_button')
 
-def setup_ui(main_window):
+def on_icon_button2_clicked(main_window):
+    debug_print("Visualize button pushed")
+    show_path_dialog(None)  # 传入主窗口实例，或传入 None
+    switch_content(main_window, 'visualize_button')
+
+def on_icon_button3_clicked(main_widow):
+    debug_print("Monitor button pushed")
+
+def init_ui(main_window):
     """初始化主窗口的UI组件和布局"""
     main_window.setWindowTitle('赛威德打磨软件文件监控服务端')
     main_window.setWindowIcon(QIcon('data/doc/SoftwareLogo.png'))
@@ -91,14 +102,22 @@ def setup_ui(main_window):
 
     # 添加图标按钮到图标栏
     icon_button1 = QAction(QIcon('./data/images/ConnectIcon.png'), 'Button 1', main_window)
-    icon_button1.triggered.connect(lambda: switch_content(main_window, 'content1'))
+    # icon_button1.triggered.connect(lambda: switch_content(main_window, 'content1'))
+    icon_button1.triggered.connect(lambda: on_icon_button1_clicked(main_window)) 
     icon_bar.addAction(icon_button1)
 
     # 添加一个空白的分隔符来增加按钮间隔
     icon_bar.addSeparator()
 
     icon_button2 = QAction(QIcon('./data/images/DataAnalysis.png'), 'Button 2', main_window)
-    icon_button2.triggered.connect(on_icon_button2_clicked)
+    icon_button2.triggered.connect(lambda: on_icon_button2_clicked(main_window))
+    icon_bar.addAction(icon_button2)
+
+    # 添加一个空白的分隔符来增加按钮间隔
+    icon_bar.addSeparator()
+
+    icon_button3 = QAction(QIcon('./data/images/DataAnalysis.png'), 'Button 2', main_window)
+    icon_button3.triggered.connect(lambda: on_icon_button3_clicked(main_window))
     icon_bar.addAction(icon_button2)
 
     # 添加图标栏到主分隔器
@@ -112,11 +131,11 @@ def setup_ui(main_window):
     main_window.operation_layout = QVBoxLayout()  # 修改：将 operation_layout 赋给 main_window
     operation_widget.setLayout(main_window.operation_layout)
 
-    # 添加均匀间隔的空间项
-    spacer1 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-    spacer2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-    spacer3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-    main_window.operation_layout.addSpacerItem(spacer1)
+    # # 添加均匀间隔的空间项
+    # spacer1 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+    # spacer2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+    # spacer3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+    # main_window.operation_layout.addSpacerItem(spacer1)
     
     # 本地IP地址显示
     main_window.ip_line_edit = QLineEdit(main_window)
@@ -141,9 +160,9 @@ def setup_ui(main_window):
     main_window.stop_button.clicked.connect(main_window.stop_server)
     main_window.operation_layout.addWidget(main_window.stop_button)
 
-    # 添加均匀间隔的空间项
-    main_window.operation_layout.addSpacerItem(spacer2)
-    main_window.operation_layout.addSpacerItem(spacer3)
+    # # 添加均匀间隔的空间项
+    # main_window.operation_layout.addSpacerItem(spacer2)
+    # main_window.operation_layout.addSpacerItem(spacer3)
 
     # 添加操作空间到右侧分隔器
     right_splitter.addWidget(operation_widget)
@@ -178,26 +197,30 @@ def setup_ui(main_window):
     main_window.status_bar = QStatusBar()
     main_window.setStatusBar(main_window.status_bar)
 
+def setup_ui(main_window):
+    # 初始化
+    init_ui(main_window)
     # 菜单栏
     setup_menu_bar(main_window)
 
 def switch_content(main_window, content_name):
     """根据所选图标按钮切换显示的内容"""
-    # 清空操作空间的内容
-    for i in reversed(range(main_window.operation_layout.count())): 
-        widget = main_window.operation_layout.itemAt(i).widget()
-        if widget:
-            widget.deleteLater()
+    button_ui.clean_operation_ui(main_window)
 
-    if content_name == 'content1':
-        # 显示与 content1 相关的 UI
+    # 重新绘制各个按钮的界面
+    if content_name == 'init':
+        init_ui(main_window)
+    elif content_name == 'connect_button':
+        # # 显示与 content1 相关的 UI
         # label = QLabel('Content 1 is displayed')
         # main_window.operation_layout.addWidget(label)
-        pass
-    elif content_name == 'content2':
-        # 显示与 content2 相关的 UI
+        button_ui.draw_connect_ui(main_window)
+    elif content_name == 'visualize_button':
+        # # 显示与 content2 相关的 UI
         # label = QLabel('Content 2 is displayed')
         # main_window.operation_layout.addWidget(label)
+        init_ui(main_window)
+    elif content_name == 'Monitor_button':
         pass
 
 def setup_menu_bar(main_window):
