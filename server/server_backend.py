@@ -2,7 +2,7 @@
 import socket
 import threading
 import os
-import time
+import re
 import config.setting as cs
 
 class FileServer:
@@ -114,7 +114,18 @@ class FileServer:
 
                 # 接收文件名
                 file_name = connection.recv(file_name_length).decode()
+
+                # 文件名过滤：只保留合法字符（字母、数字、下划线、点等）
+                file_name = re.sub(r'[^\w\.-]', '_', file_name)
+
+                # 调试输出：检查文件名
+                print(f"Received file name: {file_name}")
+
+                # 生成保存文件的路径
                 file_path = os.path.join(self.save_dir, file_name)
+
+                # 调试输出：检查文件路径
+                print(f"Saving to: {file_path}")
 
                 # 接收文件大小
                 file_size_data = connection.recv(8)
@@ -133,10 +144,6 @@ class FileServer:
                         received_size += len(data)
                         message = f"Receiving file '{file_name}': {received_size}/{file_size} bytes"
                         print(message)
-
-                        # # 使用日志信号发送更新到GUI
-                        # if self.log_signal:
-                        #     self.log_signal.emit(message)
 
                 completion_message = f"Received file '{file_name}' from {client_ip}"
                 print(completion_message)

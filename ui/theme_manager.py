@@ -23,7 +23,6 @@ class ThemeManager:
         self.set_theme('dark')
 
 
-# 主题样式配置
 THEME_STYLES = {
     "light": {
         "stylesheet": """
@@ -42,7 +41,7 @@ THEME_STYLES = {
         "stylesheet": """
             QMainWindow {
                 background-color: #2e2e2e;
-                color: white;
+                color: white;  /* 保持标题文字为白色，确保在暗黑背景下可见 */
             }
             QLabel, QTextEdit, QPushButton, QLineEdit {
                 background-color: #2e2e2e;
@@ -75,6 +74,11 @@ THEME_STYLES = {
                 background-color: #2e2e2e;
                 color: white;
                 border: 1px solid #444;
+            }
+            /* 窗口标题字体和颜色设置 */
+            QMainWindow::title {
+                font-size: 14pt;
+                color: white;  /* 确保在深色模式下标题文字是白色的 */
             }
         """,
         "status_message": '已切换到暗黑主题'
